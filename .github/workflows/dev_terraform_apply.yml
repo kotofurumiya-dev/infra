@@ -17,6 +17,7 @@ jobs:
       - uses: sarisia/actions-status-discord@v1
         with:
           status: Success
+          noprefix: true
           webhook: ${{ secrets.DISCORD_WEBHOOK }}
           color: 0xA3EEFF
 
