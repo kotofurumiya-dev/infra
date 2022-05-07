@@ -1,0 +1,28 @@
+name: Prod Terraform Plan
+
+on:
+  pull_request:
+    types: [opened, synchronize]
+    branches:
+      - develop
+    paths:
+      - 'terraform/**'
+      - '.github/workflows/_shared_terraform_plan'
+      - '.github/workflows/dev_terraform_plan.yml'
+
+jobs:
+  terraform_plan:
+    uses: ./.github/workflows/_shared_terraform_plan.yml
+    with:
+      env_name: develop
+      google_cloud_project_id: kotofurumiya-dotdev-dev
+      google_cloud_region: asia-northeast1
+      google_cloud_workload_identity_provider: 'projects/748644719084/locations/global/workloadIdentityPools/github-actions-pool/providers/github-actions'
+      google_cloud_service_account: 'terraform@kotofurumiya-dotdev-dev.iam.gserviceaccount.com'
+    secrets:
+      TERRAFORM_CLOUD_API_TOKEN: ${{ secrets.TERRAFORM_CLOUD_API_TOKEN }}
+    permissions:
+      contents: read
+      id-token: write
+      issues: write
+      pull-requests: write
