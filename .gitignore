@@ -1,0 +1,11 @@
+# OS
+.DS_Store
+Thumbs.db
+[Dd]esktop.ini
+
+# Terraform
+.terraform/
+*.tfstate
+*.tfstate.*
+*.tfvars
+.terraform.lock.hcl
