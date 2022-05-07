@@ -1,0 +1,53 @@
+name: Dev Terraform Apply
+
+on:
+  push:
+    branches:
+      - develop
+    paths:
+      - 'terraform/**'
+      - '.github/workflows/_shared_terraform_apply'
+      - '.github/workflows/dev_terraform_apply.yml'
+
+jobs:
+  discord_notification_before_job:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: sarisia/actions-status-discord@v1
+        with:
+          status: Success
+          noprefix: true
+          webhook: ${{ secrets.DISCORD_WEBHOOK }}
+          color: 0xA3EEFF
+
+  terraform_apply:
+    uses: ./.github/workflows/_shared_terraform_apply.yml
+    needs:
+      - discord_notification_before_job
+    with:
+      env_name: develop
+      google_cloud_project_id: kotofurumiya-dotdev-dev
+      google_cloud_region: asia-northeast1
+      google_cloud_workload_identity_provider: 'projects/748644719084/locations/global/workloadIdentityPools/github-actions-pool/providers/github-actions'
+      google_cloud_service_account: 'terraform@kotofurumiya-dotdev-dev.iam.gserviceaccount.com'
+    secrets:
+      TERRAFORM_CLOUD_API_TOKEN: ${{ secrets.TERRAFORM_CLOUD_API_TOKEN }}
+    permissions:
+      contents: read
+      id-token: write
+
+  discord_notification_after_job:
+    if: always()
+    needs:
+      - terraform_apply
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: technote-space/workflow-conclusion-action@v1
+
+      - uses: sarisia/actions-status-discord@v1
+        if: always()
+        with:
+          status: ${{ env.WORKFLOW_CONCLUSION }}
+          webhook: ${{ secrets.DISCORD_WEBHOOK }}
