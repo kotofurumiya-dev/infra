@@ -38,3 +38,9 @@ module "store" {
   project_id = local.project_id
   region     = local.region
 }
+
+module "service" {
+  source     = "../../modules/service"
+  project_id = local.project_id
+  region     = local.region
+}
