@@ -15,3 +15,9 @@ resource "google_project_iam_member" "cloudrun_deploy_admin" {
   role    = "roles/run.admin"
   member  = "serviceAccount:${google_service_account.cloudrun_deploy.email}"
 }
+
+resource "google_project_iam_member" "cloudrun_deploy_artifact_registry" {
+  project = var.project_id
+  role    = "roles/artifactregistry.writer"
+  member  = "serviceAccount:${google_service_account.cloudrun_deploy.email}"
+}
