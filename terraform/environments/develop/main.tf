@@ -27,3 +27,9 @@ module "network" {
   region     = local.region
   app_domain = "app-dev.kotofurumiya.dev"
 }
+
+module "store" {
+  source     = "../../modules/store"
+  project_id = local.project_id
+  region     = local.region
+}
