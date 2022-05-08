@@ -21,6 +21,11 @@ provider "google" {
   region  = local.region
 }
 
+module "iam" {
+  source     = "../../modules/iam"
+  project_id = local.project_id
+}
+
 module "network" {
   source     = "../../modules/network"
   project_id = local.project_id
