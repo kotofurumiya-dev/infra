@@ -31,16 +31,17 @@ jobs:
       id-token: write
 
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
     
     - name: Auth Workload identity
-      uses: 'google-github-actions/auth@v0'
+      uses: 'google-github-actions/auth@v1'
       with:
         workload_identity_provider: ${{ inputs.google_cloud_workload_identity_provider }}
         service_account: ${{ inputs.google_cloud_service_account }}
 
-    - uses: hashicorp/setup-terraform@v1
+    - uses: hashicorp/setup-terraform@v2
       with:
+        terraform_version: '<1.4.0'
         cli_config_credentials_token: ${{ secrets.TERRAFORM_CLOUD_API_TOKEN }}
 
     - name: terraform init
